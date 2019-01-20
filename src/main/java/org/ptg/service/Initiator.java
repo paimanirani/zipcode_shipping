@@ -61,7 +61,7 @@ public class Initiator {
    /**
     * Validate and set Ranges
     *
-    * @param list
+    * @param list List of Ranges with type string
     */
    private static void setRanges(List<String> list) {
       for (String range : list) {
@@ -78,7 +78,7 @@ public class Initiator {
    }
 
    /**
-    * First the order is sorted based on their lower bounds, and then checked if it's overlapping
+    * First the order is sorted based on their lower bounds, and then checked if there's possibility
     * for fusion to take place.
     * After the fusion is completed, the ith is saved as [1, 7] and the jth node gets removed.
     * Then, the value of *j* is decremented.
@@ -88,7 +88,7 @@ public class Initiator {
       Collections.sort(rangesList, order);
       for (int i = 0; i < rangesList.size() - 1; i++) {
          for (int j = i + 1; j < rangesList.size(); j++) {
-            if (isOverlapping(rangesList.get(i), rangesList.get(j))) {
+            if (checkFusion(rangesList.get(i), rangesList.get(j))) {
                fusion(rangesList.get(i), rangesList.get(j));
                rangesList.remove(j);
                j--;
@@ -98,29 +98,31 @@ public class Initiator {
    }
 
    /**
-    * Checking the former's upper bound along with the latter's lower bound. If greater, it overlaps.
+    * Checking the former's upper bound along with the latter's lower bound.
     * Ex: [1, 5] [2, 7] -> True (overlaps)
+    * [1, 3] [4, 6] -> True
     *
-    * @param r1
-    * @param r2
+    * @param r1 range1
+    * @param r2 range2
     * @return A boolean value whether it overlaps or not.
     */
-   private static boolean isOverlapping(Range r1, Range r2) {
-      if (r1.getUpper() > r2.getLower()) {
+   private static boolean checkFusion(Range r1, Range r2) {
+      if (r1.getUpper() > r2.getLower() || r1.getUpper() == (r2.getLower() - 1)) {
          return true;
       }
-      return false;
+      else {
+         return false;
+      }
    }
 
    /**
     * fusion of former's lower bound with latter's upper bound.
     * Ex: [1, 5] [2, 7] -> [1, 7]
     *
-    * @param r1
-    * @param r2
+    * @param r1 range1
+    * @param r2 range2
     */
    private static void fusion(Range r1, Range r2) {
       r1.setRange(r1.getLower(), r2.getUpper());
    }
-
 }

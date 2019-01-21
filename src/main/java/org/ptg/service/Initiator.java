@@ -25,12 +25,13 @@ public class Initiator {
    private static final Pattern rangePattern = Pattern.compile(regex);
 
    public static void main(String[] args) {
+      Initiator initiator = new Initiator();
       try {
-         getRanges();
+         initiator.getRanges();
          logger.info("Successfully fetched and Validated !!!");
          System.out.println(rangesList.toString());
 
-         possibleFusion();
+         initiator.possibleFusion();
          logger.info("Successfully Executed !!!");
          System.out.println(rangesList.toString());
 
@@ -44,12 +45,11 @@ public class Initiator {
     *
     * @throws IOException
     */
-   private static void getRanges() throws IOException {
+   private void getRanges() throws IOException {
       List<String> list = new ArrayList<>();
       //Get file from resources folder
-      ClassLoader classLoader = Initiator.class.getClassLoader();
-      try (BufferedReader br = new BufferedReader(new FileReader(classLoader.getResource(
-         "zip_code_ranges.txt").getFile()))) {
+      String file = Initiator.class.getClassLoader().getResource("zip_code_ranges.txt").getFile();
+      try (BufferedReader br = new BufferedReader(new FileReader(file))) {
          String line;
          while ((line = br.readLine()) != null) {
             list = Arrays.asList(line.split(" "));
@@ -63,7 +63,7 @@ public class Initiator {
     *
     * @param list List of Ranges with type string
     */
-   private static void setRanges(List<String> list) {
+   private void setRanges(List<String> list) {
       for (String range : list) {
          Matcher matcher = rangePattern.matcher(range);
          if (matcher.matches()) {
@@ -83,7 +83,7 @@ public class Initiator {
     * After the fusion is completed, the ith is saved as [1, 7] and the jth node gets removed.
     * Then, the value of *j* is decremented.
     */
-   private static void possibleFusion() {
+   private void possibleFusion() {
       Comparator<Range> order = (Range r1, Range r2) -> (int) (r1.getLower() - r2.getLower());
       Collections.sort(rangesList, order);
       for (int i = 0; i < rangesList.size() - 1; i++) {

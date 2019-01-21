@@ -1,5 +1,7 @@
 package org.ptg.model;
 
+import java.util.Objects;
+
 public class Range {
    private int lower;
    private int upper;
@@ -34,6 +36,21 @@ public class Range {
 
    public int getUpper() {
       return upper;
+   }
+
+   @Override
+   public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+      Range range = (Range) o;
+      return lower == range.lower &&
+                upper == range.upper;
+   }
+
+   @Override
+   public int hashCode() {
+
+      return Objects.hash(lower, upper);
    }
 
    @Override

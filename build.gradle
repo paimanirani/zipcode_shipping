@@ -1,0 +1,32 @@
+group 'org.ptg'
+
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+    compile group: 'log4j', name: 'log4j', version: log4j_version
+
+    testCompile group: 'junit', name: 'junit', version: junit_version
+
+
+}
+
+
+jar.archiveName = "zip-code_"+version+".jar"
+
+
+test {
+    useJUnit()
+}
+
+
+task run(type: JavaExec, dependsOn: classes) {
+    main = 'org.ptg.service.Initiator'
+    classpath = sourceSets.main.runtimeClasspath
+}
